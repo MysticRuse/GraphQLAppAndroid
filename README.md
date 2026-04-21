@@ -2,9 +2,9 @@
 
 ## Screenshots
 
-|                  Search Screen                  |                       Profile Screen                        |
-|:-----------------------------------------------:|:-----------------------------------------------------------:|
-| ![Search Screen](screenshots/search_screen.png) | ![Profile Screen](screenshots/romain_guy_profilescreen.png) |
+|                           Launch                            |                  Search Screen                  |                       Profile Screen                        |                          Profile Screen Load More                           |
+|:-----------------------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------------------:|:---------------------------------------------------------------------------:|
+| ![Search Screen Basic](screenshots/search_screen_empty.png) | ![Search Screen](screenshots/search_screen.png) | ![Profile Screen](screenshots/romain_guy_profilescreen.png) | ![ProfileScreen Pagination](screenshots/romainguy_pagination_load_more.png) |
 
 ## Step 1 of 8 — Add Apollo Kotlin to the build files
 - 1a. gradle/libs.versions.toml
