@@ -8,6 +8,33 @@ A modern Android application demonstrating the power of Apollo Kotlin and the Gi
 |:-----------------------------------------------------------:|:----------------------------------------------------------:|:--------------------------------------------------------------------:|:----------------------------------------------------------------------------:|
 | ![Search Screen Basic](screenshots/search_screen_empty.png) | ![Search Screen](screenshots/JakeWharton_searchscreen.png) | ![Profile Screen](screenshots/JakeWharton_profile_with_unfollow.png) | ![ProfileScreen Pagination](screenshots/JakeWharton_pagination_loadmore.png) |
 
+## Phase 2
+## Optimistic Flow for Follow/Unfollow
+- Add UnfollowUser.graphql
+```kotlin
+mutation UnfollowUser($userId: ID!) { 
+    unfollowUser(input: { userId: $userId }) {
+        user {
+          id
+          viewerIsFollowing
+          followers {
+            totalCount
+          }
+        }
+    }
+}
+```
+- In ProfileViewModel.kt: Add code for optimistic version 
+  - Save previous wasFollowing state and previous follower count.
+  - Flip UI immediately, disable button to prevent double tap.
+  - Fire correct mutation based in what the state WAS before flipping.
+  - If server rejects it, rollback to what it was before.
+- In ProfileScreen.kt - remove showing spinner for the FOllow/Unfollow button in the USerHeader composable.
+- Now the flow is:
+  - Tap Follow → button instantly reads "Unfollow", count goes +1 → UnfollowUserMutation fires in background → rollback if it fails
+  - Tap Unfollow → button instantly reads "Follow", count goes -1 → FollowUserMutation fires in background → rollback if it fails
+
+## Phase 1
 ## Step 1 of 8 — Add Apollo Kotlin to the build files
 - 1a. gradle/libs.versions.toml
 - 1b. app/build.gradle.kts

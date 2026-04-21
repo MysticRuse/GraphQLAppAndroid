@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.mr.githubexplorer.graphql.FollowUserMutation
 import com.android.mr.githubexplorer.graphql.GetUserProfileQuery
+import com.android.mr.githubexplorer.graphql.UnfollowUserMutation
 import com.android.mr.githubexplorer.graphql.fragment.RepoFields
 import com.android.mr.githubexplorer.network.apolloClient
 import com.apollographql.apollo.api.Optional
@@ -56,8 +57,10 @@ class ProfileViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
 
     // Navigation passes the login as a nav argument — SavedStateHandle picks it up automatically
     private val login: String = checkNotNull(savedStateHandle["login"])
+
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+
 
     init { loadProfile() }
 
@@ -141,21 +144,44 @@ class ProfileViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         val current = _uiState.value
         if (current.isFollowLoading || current.userId.isEmpty()) return
 
-        _uiState.update { it.copy(isFollowLoading = true) }
+        val wasFollowing = current.viewerIsFollowing
+        val previousCount = current.followerCount
+
+        // Optimistic Update - flip UI immediately, disable button to prevent double tap
+        _uiState.update {
+            it.copy(
+                viewerIsFollowing = !wasFollowing,
+                followerCount = if (wasFollowing) previousCount - 1 else previousCount + 1,
+                isFollowLoading = true
+            )
+        }
 
         viewModelScope.launch {
-            val response = apolloClient
-                .mutation(FollowUserMutation(userId = current.userId))
-                .execute()
+            // Fire the correct mutation based on what the state WAS before we flipped it
+            val hasErrors = if (wasFollowing) {
+                val response = apolloClient
+                    .mutation(UnfollowUserMutation(userId = current.userId))
+                    .execute()
+                response.hasErrors() || response.data == null
+            } else {
+                val response = apolloClient
+                    .mutation(FollowUserMutation(userId = current.userId))
+                    .execute()
+                response.hasErrors() || response.data == null
+            }
 
-            // The mutation returns the updated user — use it to refresh local state
-            val updated = response.data?.followUser?.user
             _uiState.update {
-                it.copy(
-                    isFollowLoading = false,
-                    viewerIsFollowing = updated?.viewerIsFollowing ?: it.viewerIsFollowing,
-                    followerCount = updated?.followers?.totalCount ?: it.followerCount
-                )
+                if (hasErrors) {
+                    // Server rejected it - rollback to what it was before
+                    it.copy(
+                        viewerIsFollowing = wasFollowing,
+                        followerCount = previousCount,
+                        isFollowLoading = false,
+                        error = if (wasFollowing) "Failed to unfollow" else "Failed to follow"
+                    )
+                } else {
+                    it.copy(isFollowLoading = false)
+                }
             }
         }
     }

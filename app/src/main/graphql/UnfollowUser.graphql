@@ -1,0 +1,18 @@
+
+"""
+Why return id and viewerIsFollowing from the mutation?
+Apollo's cache is keyed by id. When the mutation response comes back with an updated User object,
+Apollo automatically updates every query result in the cache that contains that user — the follower
+count refreshes on screen with zero extra code.
+"""
+mutation UnfollowUser($userId: ID!) {
+    unfollowUser(input: { userId: $userId }) {
+        user {
+            id
+            viewerIsFollowing
+            followers {
+                totalCount
+            }
+        }
+    }
+}

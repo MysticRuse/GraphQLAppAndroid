@@ -131,14 +131,7 @@ private fun UserHeader(uiState: ProfileUiState, onFollowClick: () -> Unit) {
             onClick = onFollowClick,
             enabled = !uiState.isFollowLoading
         ) {
-            if (uiState.isFollowLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    strokeWidth = 2.dp
-                )
-            } else {
-                Text(if (uiState.viewerIsFollowing) "Unfollow" else "Follow")
-            }
+            Text(if (uiState.viewerIsFollowing) "Unfollow" else "Follow")
         }
 
         HorizontalDivider()

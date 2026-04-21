@@ -1,6 +1,5 @@
 package com.android.mr.githubexplorer.network
 
-import androidx.compose.runtime.Applier
 import com.android.mr.githubexplorer.BuildConfig
 import com.apollographql.apollo.ApolloClient
 
