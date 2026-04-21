@@ -1,10 +1,12 @@
-# GraphQLAppAndroid
+# Android App with GraphQL
+
+A modern Android application demonstrating the power of Apollo Kotlin and the GitHub GraphQL API. It features type-safe queries, cursor-based pagination, and fragment reuse to build a high-performance GitHub user explorer with Jetpack Compose.
 
 ## Screenshots
 
-|                           Launch                            |                  Search Screen                  |                       Profile Screen                        |                          Profile Screen Load More                           |
-|:-----------------------------------------------------------:|:-----------------------------------------------:|:-----------------------------------------------------------:|:---------------------------------------------------------------------------:|
-| ![Search Screen Basic](screenshots/search_screen_empty.png) | ![Search Screen](screenshots/search_screen.png) | ![Profile Screen](screenshots/romain_guy_profilescreen.png) | ![ProfileScreen Pagination](screenshots/romainguy_pagination_load_more.png) |
+|                           Launch                            |                  Search Screen                  |                            Profile Screen                            |                          Profile Screen Load More                           |
+|:-----------------------------------------------------------:|:-----------------------------------------------:|:--------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
+| ![Search Screen Basic](screenshots/search_screen_empty.png) | ![Search Screen](screenshots/search_screen.png) | ![Profile Screen](screenshots/JakeWharton_profile_with_unfollow.png) | ![ProfileScreen Pagination](screenshots/romainguy_pagination_load_more.png) |
 
 ## Step 1 of 8 — Add Apollo Kotlin to the build files
 - 1a. gradle/libs.versions.toml
