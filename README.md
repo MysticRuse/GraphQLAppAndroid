@@ -1,5 +1,11 @@
 # GraphQLAppAndroid
 
+## Screenshots
+
+|                  Search Screen                  |                       Profile Screen                        |
+|:-----------------------------------------------:|:-----------------------------------------------------------:|
+| ![Search Screen](screenshots/search_screen.png) | ![Profile Screen](screenshots/romain_guy_profilescreen.png) |
+
 ## Step 1 of 8 — Add Apollo Kotlin to the build files
 - 1a. gradle/libs.versions.toml
 - 1b. app/build.gradle.kts
