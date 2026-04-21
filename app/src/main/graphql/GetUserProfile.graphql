@@ -1,0 +1,39 @@
+"""
+Why $after: String with no !? It's nullable — on the first load you pass null (no cursor yet).
+On "Load more" you pass the endCursor from the previous page.
+This is the Relay cursor pagination pattern used by GitHub's API.
+
+Why ... on Repository for pinned items? pinnedItems can return repos or gists, so it returns a union type.
+The ... on Repository is an inline fragment — "only select these fields if this item is a Repository".
+"""
+query GetUserProfile($login: String!, $after: String) {
+    user(login: $login) {
+        id
+        login
+        name
+        viewerIsFollowing
+        followers {
+            totalCount
+        }
+        pinnedItems(first: 6, types: REPOSITORY) {
+            nodes {
+                ... on Repository {
+                    ...RepoFields
+                }
+            }
+        }
+        repositories(
+            first: 10
+            after: $after
+            orderBy: { field: UPDATED_AT, direction: DESC }
+        ) {
+            nodes {
+                ...RepoFields
+            }
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
+        }
+    }
+}

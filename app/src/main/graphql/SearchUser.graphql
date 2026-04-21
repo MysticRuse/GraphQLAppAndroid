@@ -1,0 +1,20 @@
+
+"""
+Why $login: String!? The $ declares a variable.
+The ! means non-null — you must always pass a value.
+Apollo generates a SearchUserQuery(login: String) Kotlin class from this. No manual model writing.
+"""
+query SearchUser($login: String!) {
+    user(login: $login) {
+        login
+        name
+        avatarUrl
+        bio
+        followers {
+            totalCount
+        }
+        following {
+            totalCount
+        }
+    }
+}

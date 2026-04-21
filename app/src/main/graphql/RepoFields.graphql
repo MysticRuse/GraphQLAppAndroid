@@ -1,0 +1,17 @@
+
+"""
+Why a fragment? A fragment is a reusable set of fields. We'll use RepoFields in both the pinned
+repos query and the paginated repos query. If you later want to add forkCount,
+you add it once here and both queries get it automatically.
+"""
+
+fragment RepoFields on Repository {
+    name
+    description
+    stargazerCount
+    primaryLanguage {
+        name
+        color
+    }
+    url
+}
